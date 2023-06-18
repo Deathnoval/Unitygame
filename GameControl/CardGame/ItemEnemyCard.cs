@@ -7,6 +7,12 @@ using UnityEngine.UI;
 public class ItemEnemyCard : MonoBehaviour
 {
     public List<CardData> listCard = new List<CardData>();
+    //####18/6
+   /* public static List<CardData> CardsInHandStatic=new List<CardData>();
+    public List<CardData> CardsInHand=new List<CardData>();
+    public static int CardsInHandNumber;*/
+    //
+
     public List<Player> players;
 
     public GameObject[] enemyItems;
@@ -37,7 +43,11 @@ public class ItemEnemyCard : MonoBehaviour
     }
     void Start()
     {
-
+        //###18/6
+        
+/*        CardsInHandStatic = CardsInHand;
+*/        
+        ///////
         string jsonFilePath = Path.Combine(Application.streamingAssetsPath, "cardData.json");
         if (File.Exists(jsonFilePath))
         {
@@ -61,8 +71,14 @@ public class ItemEnemyCard : MonoBehaviour
         cardDescription = listCard[0].cardDescription;
         cardPower = listCard[0].cardPower;
         img.sprite = thisSprite;
-         if (this.tag == "Item2")
+        if (this.tag == "Item2")
         {
+            //##18/6
+            //CardsInHand[CardsInHandNumber] = Deck.staticDeck[Deck.deckSize - 1];
+            //CardsInHandNumber++;
+            //Debug.Log("CardsInHandNumber=" + CardsInHandNumber);
+            //
+            Debug.Log(Deck.deckSize - 1);
             listCard[0] = Deck.staticDeck[Deck.deckSize - 1];
             Deck.deckSize -= 1;
             enemyItems = GameObject.FindGameObjectsWithTag("Item2");
@@ -72,6 +88,16 @@ public class ItemEnemyCard : MonoBehaviour
             }
             this.tag = "Untagged";
         }
+         //####18/6
+        /*for(int i=0;i<90;i++)
+        {
+            if (CardsInHand[i].cardId!=0)
+            {
+                CardsInHandStatic[i] = CardsInHand[i];
+                //Debug.Log("i of itemEnemycard=" + i);
+            }
+        }*/
+         //////
         if (IsCardBack)
         {
             cardBack.SetActive(true);

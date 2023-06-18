@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class GameControl : MonoBehaviour
 {
-    private List<ItemCard> usedCards = new List<ItemCard>();
+    public List<ItemCard> usedCards = new List<ItemCard>();
     public List<Player> players;
     [SerializeField] GridMap grid;
     [SerializeField] Tilemap targetTilemap;

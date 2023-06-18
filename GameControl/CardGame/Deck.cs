@@ -7,12 +7,27 @@ using UnityEngine.UI;
 
 public class Deck : MonoBehaviour
 {
+
     public List<CardData> deck = new List<CardData>();
     public List<CardData> myList = new List<CardData>();
     public List<CardData> container = new List<CardData>();
-
     public static List<CardData> staticDeck = new List<CardData>();
 
+    //####18/6
+    public List<CardData>CardsInHand= new List<CardData>();
+    [SerializeField] Dice dice;
+    [SerializeField] GameControl gameControl;
+    public GameObject Hand;
+    public GameObject Zone; 
+    public int count = 1;
+    public bool[] AiCanSummon;
+    public int[] cardsId;
+    public int SummonThisId;
+    public ItemEnemyCard itemEnemyCard;
+    public int summonID;
+    public int howManyCards;
+    /*    public bool Player2CanPlay;
+    */    //
     public GameObject cardIndex1;
     public GameObject cardIndex2;
     public GameObject cardIndex3;
@@ -26,11 +41,16 @@ public class Deck : MonoBehaviour
     public GameObject DeckPanel;
   
     public GameObject[] Clones;
-    
+
     public static int deckSize = 90;
+
 
     void Start()
     {
+        //####18/6
+        StartCoroutine(WaitFiveSecond());
+        //
+
 
         string jsonFilePath = Path.Combine(Application.streamingAssetsPath, "cardData.json");
         if (File.Exists(jsonFilePath))
@@ -71,7 +91,101 @@ public class Deck : MonoBehaviour
         {
             ResetDeck();
         }
+       /* //##18/6
+        if(Player2CanPlay==true)
+        {
+            for (int i = 0; i < 90; i++)
+            {
+                //Debug.Log(i);
+                if (ItemEnemyCard.CardsInHandStatic[i].cardId!=0)
+                {
 
+                    CardsInHand[i] = ItemEnemyCard.CardsInHandStatic[i];
+                    
+                }
+            }
+        }*/
+        //
+
+        if(0==0)
+        {
+            int j = 0;
+            howManyCards = 0;
+            foreach(Transform child in Hand.transform)
+            {
+                howManyCards++;
+            }
+            foreach(Transform child in Hand.transform)
+            {
+                CardsInHand[j] = child.GetComponent<ItemEnemyCard>().listCard[0];
+                j++;
+            }
+            for(int i=0; i<90;i++)
+            {
+
+                if(i>=howManyCards)
+                {
+                    CardsInHand[i] = myList[0];
+                }
+            }
+            j = 0;
+        }
+        if (gameControl.players[1].playerTurn==true)
+        {
+            for(int i=0; i<90;i++)
+            {
+                if (CardsInHand[i].cardId!=0)
+                {
+                    AiCanSummon[i] = true;
+                }
+            }
+        }
+        else
+        {
+            for(int i=0; i<90;i++)
+            {
+                AiCanSummon[i]=false;
+            }
+        }
+        if (gameControl.players[1].playerTurn == true && dice.hasRolledDice == true)
+        {
+            summonID = 0;
+            SummonThisId = 0;
+            int index = 0;
+            for (int i = 0; i < 90; i++)
+            {
+                if (AiCanSummon[i] == true)
+                {
+                    cardsId[index] = CardsInHand[i].cardId;
+                    index++;
+                }
+            }
+            for (int i = 0; i < 90; i ++)
+            {
+                if(cardsId[i]!=0)
+                {
+                    if (cardsId[i]>summonID)
+                    {
+                        summonID = cardsId[i];
+                    }
+                }
+            }
+            SummonThisId=summonID;
+            foreach(Transform child in Hand.transform) { 
+                if(child.GetComponent<ItemEnemyCard>().cardIdGame==SummonThisId && count<2 && dice.hasRolledDice==true)
+                {
+                    Debug.Log(dice.hasRolledDice);
+                    child.transform.SetParent(Zone.transform);
+                    count++;
+                    break;
+                }
+
+             }
+        }
+        if (gameControl.players[0].playerTurn==true)
+        {
+            count = 1;
+        }
     }
     void CreateDeck()
     {
@@ -162,6 +276,13 @@ public class Deck : MonoBehaviour
         deck = new List<CardData>();
         CreateDeck();
     }
+    //###18/6
+    IEnumerator WaitFiveSecond()
+    {
+        yield return new WaitForSeconds(5);
+/*        Player2CanPlay = true;
+*/    }
+    //
 
 }
 
